@@ -16,7 +16,6 @@ namespace GoodHamburgerAPI.Controllers
             _context = context;
         }
 
-        // GET: api/orders (Lista todos os pedidos)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
@@ -26,29 +25,28 @@ namespace GoodHamburgerAPI.Controllers
                 .ToListAsync();
         }
 
-        // POST: api/orders (Cria um novo pedido)
+        
         [HttpPost]
         public async Task<ActionResult<OrderDto>> PostOrder([FromBody] OrderRequest request)
         {
-            // 1. Validação básica
+          
             if (request?.Items == null || request.Items.Count == 0)
                 return BadRequest("O pedido deve conter itens.");
 
-            // 2. Criar o objeto Order (aqui declaramos a variável 'order')
+           
             var order = new Order
             {
                 Items = request.Items.Select(item => new OrderItem { ProductId = item.ProductId }).ToList(),
                 OrderDate = DateTime.Now
             };
 
-            // 3. Verificar se há mais de um sanduíche
             var sandwichCount = order.Items.Count(i =>
                 _context.Products.Find(i.ProductId)?.Category == "Sandwich");
 
             if (sandwichCount > 1)
                 return BadRequest("Apenas um sanduíche por pedido é permitido.");
 
-            // 4. Verificar itens duplicados
+           
             var duplicateItems = order.Items
                 .GroupBy(i => i.ProductId)
                 .Where(g => g.Count() > 1)
@@ -64,7 +62,7 @@ namespace GoodHamburgerAPI.Controllers
                 return BadRequest($"Itens duplicados não são permitidos: {string.Join(", ", productNames)}");
             }
 
-            // 5. Calcular o total com descontos
+           
             var items = order.Items
                 .Select(i => _context.Products.Find(i.ProductId))
                 .Where(p => p != null)
@@ -78,20 +76,20 @@ namespace GoodHamburgerAPI.Controllers
             if (sandwich != null)
             {
                 if (hasFries && hasDrink)
-                    total *= 0.8m; // 20% de desconto
+                    total *= 0.8m; 
                 else if (hasDrink)
-                    total *= 0.85m; // 15% de desconto
+                    total *= 0.85m; 
                 else if (hasFries)
-                    total *= 0.9m; // 10% de desconto
+                    total *= 0.9m; 
             }
 
             order.TotalAmount = total;
 
-            // 6. Salvar no banco de dados
+            
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            // 7. Mapear para DTO antes de retornar
+            
             var orderDto = new OrderDto
             {
                 Id = order.Id,
@@ -118,7 +116,7 @@ namespace GoodHamburgerAPI.Controllers
             public int ProductId { get; set; }
         }
 
-        // DELETE: api/orders/1 (Remove um pedido)
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
         {

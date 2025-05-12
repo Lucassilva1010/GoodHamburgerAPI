@@ -9,7 +9,7 @@ namespace GoodHamburgerAPI.Models
         public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }
 
-        [JsonIgnore] // Adicione este atributo
+        [JsonIgnore] 
         public List<OrderItem> Items { get; set; } = new();
     }
 }

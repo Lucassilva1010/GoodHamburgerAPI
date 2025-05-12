@@ -16,14 +16,14 @@ namespace GoodHamburgerAPI.Controllers
             _context = context;
         }
 
-        // GET: api/products (Lista todos os produtos)
+       
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             return await _context.Products.ToListAsync();
         }
 
-        // GET: api/products/sandwiches (Lista só sanduíches)
+        
         [HttpGet("sandwiches")]
         public async Task<ActionResult<IEnumerable<Product>>> GetSandwiches()
         {
@@ -32,7 +32,6 @@ namespace GoodHamburgerAPI.Controllers
                 .ToListAsync();
         }
 
-        // GET: api/products/extras (Lista só extras)
         [HttpGet("extras")]
         public async Task<ActionResult<IEnumerable<Product>>> GetExtras()
         {

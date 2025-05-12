@@ -15,7 +15,7 @@ namespace GoodHamburgerAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configurações do modelo e seed data
+           
             modelBuilder.Entity<Product>().HasData(
                 new Product { Id = 1, Name = "X Burger", Price = 5.00m, Category = "Sandwich" },
                 new Product { Id = 2, Name = "X Egg", Price = 4.50m, Category = "Sandwich" },
